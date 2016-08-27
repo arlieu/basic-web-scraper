@@ -58,7 +58,7 @@ class WebScraper:
         labels = ["Bid/Ask", "1 Year Target Price", "---", "Share Volume", "---", "---", "52 Week High/Low", 
                     "Market Cap", "P/E", "---", "EPS", "---", "---", "---", "---", "Beta", "---", "---", 
                     "---", "---", "---"]
-        for i in range(0, n-1):                 
+        for i in range(0, n):                 
             url = "http://www.nasdaq.com/symbol/" + targets[i]
             r = requests.get(url)
                 
