@@ -22,16 +22,86 @@ class WebScraper:
             selection = input("Please select an option: ").upper()
             print("")
             if (selection == 'A' or selection == "VIEW STATISTICAL DATA"):
-                self.StatOptions()
+                self.DataDisplay()
             elif (selection == 'B' or selection == "ADD SYMBOLS TO PORTFOLIO"):
-                self.MainMenu()
+                self.AddSymbol()
             elif (selection == 'C' or selection == "QUIT"): 
                 print("Program terminated.")
                 sys.exit(0)
             else:
                 print("Invalid option.")
                 continue
-                
+    
+    def DataDisplay(self): 
+        choice = ""
+
+        while (1):
+            print("Display Options\n" + \
+                "a) Select Symbols to Display\n" + \
+                "b) Display Entire Portfolio\n" + \
+                "c) Main Menu\n")
+
+            selection = input("Please select an option: ").upper()
+            choice = selection
+            print("")
+            if (selection == 'A' or selection == "SELECT SYMBOLS TO DISPLAY"):
+                break
+            elif (selection == 'B' or selection == "DISPLAY ENTIRE PORTFOLIO"):
+                break 
+            elif (selection == 'C' or selection == "MAIN MENU"): 
+                self.MainMenu()
+            else:
+                print("Invalid option.")
+                continue
+
+        if (choice == 'B'):
+            symbols = list(self.stocks.keys())
+            bidAskList, targetList, highLowList, capList, peList, epsList, betaList = ([] for i in range(7))
+            for company in self.stocks:
+                bidAskList.append(self.stocks[company]["Bid/Ask"])
+                targetList.append(self.stocks[company]["1 Year Target Price"])
+                highLowList.append(self.stocks[company]["52 Week High/Low"])
+                capList.append(self.stocks[company]["Market Cap"])
+                peList.append(self.stocks[company]["P/E"])
+                epsList.append(self.stocks[company]["EPS"])
+                betaList.append(self.stocks[company]["Beta"])
+
+            for sym in symbols: 
+                print(sym, end='') 
+                print('\t', end='')
+            print("")
+
+            for i in range(0, len(bidAskList) // len(symbols)):
+                for j in range(0, len(symbols)):
+                    print(bidAskList[i+j], end ='')
+                    print('\t', end='')
+                print("")                
+                for j in range(0, len(symbols)):
+                    print(targetList[i+j], end ='')
+                    print('\t', end='')
+                print("")
+                for j in range(0, len(symbols)):
+                    print(highLowList[i+j], end ='')
+                    print('\t', end='')
+                print("")
+                for j in range(0, len(symbols)):
+                    print(capList[i+j], end ='')
+                    print('\t', end='')
+                print("")
+                for j in range(0, len(symbols)):
+                    print(peList[i+j], end ='')
+                    print('\t', end='')
+                print("")
+                for j in range(0, len(symbols)):
+                    print(epsList[i+j], end ='')
+                    print('\t', end='')
+                print("")
+                for j in range(0, len(symbols)):
+                    print(betaList[i+j], end ='')
+                    print('\t', end='')
+                print("")
+
+
     def StatOptions(self):
         '''Options to view saved companies' statistical data.'''
         targets = []
@@ -67,14 +137,16 @@ class WebScraper:
                 while (1):
                     addSymbol = input("Would you like to add this symbol (Y/n)?: ").upper()
                     if (addSymbol == "YES" or addSymbol == "Y"):
-                        self.Selection()
+                        self.AddSymbol()
                     elif (addSymbol == "NO" or addSymbol == "N"):
                         self.StatOptions()
                     else:
                         print("Invalid response.")
                         continue
 
-        #if (option == 'A' or option == "CURRENT PRICE"):
+        if (option == 'A' or option == "CURRENT PRICE"):
+            self.CurrentPrice(self, targets)
+
             
     def TargetPrice(self, symbol): 
         if (symbol in self.stocks): 
@@ -91,7 +163,7 @@ class WebScraper:
                     print("Invalid response.")
                     continue
 
-    def Selection(self):
+    def AddSymbol(self):
         '''Accepts symbols to be added to portfolio.'''
         targets = []
 
@@ -102,9 +174,12 @@ class WebScraper:
         end = False
         while (1):
             symbol = input("Symbol " + str(n+1) + ": ").lower()
-            if (symbol == "end" and len(targets) == 0):
-                print("No valid symbol entered.")
-                self.Redirect()
+            if (symbol == "end"):
+                if (len(targets) == 0):
+                    print("No valid symbol entered.")
+                    self.Redirect()
+                else: 
+                    break
             elif (self.ValidSymbol(symbol)):   
                 targets.append(symbol)
                 n += 1
@@ -112,6 +187,7 @@ class WebScraper:
                 continue
             
         self.StockInfo(targets, n)
+        print("")
         self.MainMenu()
 
     def StockInfo(self, targets, n):
