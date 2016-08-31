@@ -58,48 +58,68 @@ class WebScraper:
             symbols = list(self.stocks.keys())
             bidAskList, targetList, highLowList, capList, peList, epsList, betaList = ([] for i in range(7))
             for company in self.stocks:
-                bidAskList.append(self.stocks[company]["Bid/Ask"])
-                targetList.append(self.stocks[company]["1 Year Target Price"])
-                highLowList.append(self.stocks[company]["52 Week High/Low"])
-                capList.append(self.stocks[company]["Market Cap"])
-                peList.append(self.stocks[company]["P/E"])
-                epsList.append(self.stocks[company]["EPS"])
-                betaList.append(self.stocks[company]["Beta"])
+                bid, ask = self.stocks[company]["Bid/Ask"].split('/')
+                bid = "{:.2f}".format(float(bid))
+                ask = "{:.2f}".format(float(ask))
+                bidAsk = bid+'/'+ask
+                bidAskList.append(bidAsk)
+
+                target = "{:.2f}".format(float(self.stocks[company]["1 Year Target Price"]))
+                targetList.append(target)
+                
+                high, low = self.stocks[company]["52 Week High/Low"].split('/')                
+                high = "{:.2f}".format(float(high))
+                low = "{:.2f}".format(float(low))
+                highLow = high+'/'+low
+                highLowList.append(highLow)
+                
+                capital = "{:.2f}".format(float(self.stocks[company]["Market Cap"]))
+                capList.append(capital)
+                
+                pe = "{:.2f}".format(float(self.stocks[company]["P/E"]))
+                peList.append(pe)
+                
+                eps = "{:.2f}".format(float(self.stocks[company]["EPS"]))
+                epsList.append(eps)
+                
+                beta = "{:.2f}".format(float(self.stocks[company]["Beta"]))
+                betaList.append(beta)
 
             for sym in symbols: 
-                print(sym, end='') 
-                print('\t', end='')
-            print("")
+                print(sym, end="") 
+                self.AlignTable(sym)
+            self.AlignTable("", True, len(symbols))
 
             for i in range(0, len(bidAskList) // len(symbols)):
                 for j in range(0, len(symbols)):
-                    print(bidAskList[i+j], end ='')
-                    print('\t', end='')
+                    print(bidAskList[i+j], end ="")
+                    self.AlignTable(bidAskList[i+j])
                 print("")                
                 for j in range(0, len(symbols)):
-                    print(targetList[i+j], end ='')
-                    print('\t', end='')
+                    print(targetList[i+j], end ="")
+                    self.AlignTable(targetList[i+j])
                 print("")
                 for j in range(0, len(symbols)):
-                    print(highLowList[i+j], end ='')
-                    print('\t', end='')
+                    print(highLowList[i+j], end ="")
+                    self.AlignTable(highLowList[i+j])
                 print("")
                 for j in range(0, len(symbols)):
                     print(capList[i+j], end ='')
-                    print('\t', end='')
+                    self.AlignTable(capList[i+j])
                 print("")
                 for j in range(0, len(symbols)):
-                    print(peList[i+j], end ='')
-                    print('\t', end='')
+                    print(peList[i+j], end ="")
+                    self.AlignTable(peList[i+j])
                 print("")
                 for j in range(0, len(symbols)):
-                    print(epsList[i+j], end ='')
-                    print('\t', end='')
+                    print(epsList[i+j], end ="")
+                    self.AlignTable(epsList[i+j])
                 print("")
                 for j in range(0, len(symbols)):
-                    print(betaList[i+j], end ='')
-                    print('\t', end='')
+                    print(betaList[i+j], end ="")
+                    self.AlignTable(betaList[i+j])
                 print("")
+            print("")
 
 
     def StatOptions(self):
@@ -255,3 +275,35 @@ class WebScraper:
             else:
                 print("Invalid option.")
                 continue
+    
+    def AlignTable(self, value, header=False, n=0):
+        if (len(value) == 3): 
+            print("                |", end="")
+        elif (len(value) == 4):
+            print("               |", end="")
+        elif (len(value) == 5):
+            print("              |", end="")
+        elif (len(value) == 6): 
+            print("             |", end="") 
+        elif (len(value) == 7): 
+            print("            |", end="")  
+        elif (len(value) == 8):
+            print("           |", end="") 
+        elif (len(value) == 9): 
+            print("          |", end="") 
+        elif (len(value) == 10): 
+            print("         |", end="")  
+        elif (len(value) == 11):
+            print("        |", end="") 
+        elif (len(value) == 12):
+            print("       |", end="") 
+        elif (len(value) == 13): 
+            print("      |", end="") 
+        elif (len(value) == 14): 
+            print("     |", end="")  
+        elif (len(value) == 15):
+            print("    |", end="") 
+
+        if (header == True):
+            print("")
+            print("-------------------|" * n)
